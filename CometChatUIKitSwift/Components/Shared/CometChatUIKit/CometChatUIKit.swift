@@ -30,7 +30,7 @@ final public class CometChatUIKit {
         CometChat.init(appId: uiKitSettings.appID, appSettings: AppSettings(builder: uiKitSettings.appSettingsBuilder)) { isSuccess  in
             CometChatUIKit.uiKitSettings = uiKitSettings
             if isSuccess {
-                CometChat.setSource(resource: "uikit-v4", platform: "ios", language: "swift", version: UIKitConstants.version)
+                CometChat.setSource(resource: "uikit-v5", platform: "ios", language: "swift", version: UIKitConstants.version)
                 #if canImport(CometChatCallsSDK)
                 if !uiKitSettings.isCallingDisabled {
                     if let customCallingExtension = uiKitSettings.callingExtensions {

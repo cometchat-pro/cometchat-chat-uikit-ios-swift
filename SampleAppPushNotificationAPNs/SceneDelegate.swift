@@ -99,7 +99,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 result in
                 switch result {
                 case .success(_):
-                    CometChat.setSource(resource: "uikit-v4", platform: "ios", language: "swift")
+                    CometChat.setSource(resource: "uikit-v5", platform: "ios", language: "swift")
                     break
                 case .failure(let error):
                     print( "Initialization Error:  \(error.localizedDescription)")

@@ -3666,6 +3666,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SampleApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SampleApp;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -3677,8 +3678,8 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.inscripts.sample.app.SampleApp;
+				MARKETING_VERSION = "5.0.0-beta.2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3701,6 +3702,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SampleApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SampleApp;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
@@ -3712,8 +3714,8 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.inscripts.sample.app.SampleApp;
+				MARKETING_VERSION = "5.0.0-beta.2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -3738,7 +3740,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SampleAppPushNotificationAPNs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "CometChat Team Messenger";
+				INFOPLIST_KEY_CFBundleDisplayName = SampleAppPushNotificationAPNs;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access Camera";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turn on location services to share your location with everyone.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone to record audio messages";
@@ -3754,8 +3756,8 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = "5.0.0-alpha13";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.swift;
+				MARKETING_VERSION = "5.0.0-beta.2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.apns.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -3782,7 +3784,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SampleAppPushNotificationAPNs/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "CometChat Team Messenger";
+				INFOPLIST_KEY_CFBundleDisplayName = SampleAppPushNotificationAPNs;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Access Camera";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turn on location services to share your location with everyone.";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to the microphone to record audio messages";
@@ -3798,8 +3800,8 @@
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = "5.0.0-alpha13";
-				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.swift;
+				MARKETING_VERSION = "5.0.0-beta.2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.sampleapp.apns.swift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -3961,7 +3963,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 4.3.17;
+				MARKETING_VERSION = "5.0.0-beta.2";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.CometChatUIKitSwift;
@@ -4008,7 +4010,7 @@
 					"@loader_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "";
-				MARKETING_VERSION = 4.3.17;
+				MARKETING_VERSION = "5.0.0-beta.2";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cometchat.CometChatUIKitSwift;
