@@ -131,6 +131,8 @@ class LoginWithUidVC: UIViewController {
     }
     var selectedSampleUser: (name: String, uid: String, avatar: String)?
     lazy var keyboardDismissGusture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+    
+    var selectedUID = -1
 
 
     override func viewDidLoad() {
@@ -305,6 +307,11 @@ extension LoginWithUidVC: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SampleUserCVCell", for: indexPath) as! SampleUserCVCell
+        if selectedUID == indexPath.row{
+            cell.didSelect()
+        }else{
+            cell.didDeselect()
+        }
         cell.set(data: sampleUsers[indexPath.row])
         return cell
     }
@@ -322,16 +329,13 @@ extension LoginWithUidVC: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? SampleUserCVCell {
-            selectedSampleUser = sampleUsers[indexPath.row]
-            cell.didSelect()
+        if selectedUID == indexPath.row{
+            selectedUID = -1
+        }else{
+            selectedUID = indexPath.row
+            selectedSampleUser = sampleUsers[selectedUID]
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? SampleUserCVCell {
-            cell.didDeselect()
-        }
+        collectionView.reloadData()
     }
 }
 

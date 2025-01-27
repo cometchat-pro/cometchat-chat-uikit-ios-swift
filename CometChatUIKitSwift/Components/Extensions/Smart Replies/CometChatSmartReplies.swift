@@ -20,31 +20,57 @@ protocol CometChatSmartRepliesDelegate: AnyObject {
 
 @IBDesignable public  class CometChatSmartReplies: UIView {
     
-    // MARK: - Declaration of Outlets
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionLayout: UICollectionViewFlowLayout! {
-        didSet{
-            collectionLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
-    }
     // MARK: - Declaration of Variables
+    private lazy var collectionLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 8
+        layout.minimumInteritemSpacing = 8
+        return layout
+    }()
+    
+    private lazy var collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionLayout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = SmartRepliesStyle().background
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.roundViewCorners(corner: SmartRepliesStyle().cornerRadius)
+        collectionView.register(CometChatSmartRepliesItem.self, forCellWithReuseIdentifier: "CometChatSmartRepliesItem")
+        return collectionView
+    }()
+    
     var user: User?
     var group: Group?
-    var onClick:((_ title: String) -> Void)?
-    var view: UIView!
+    var onClick: ((_ title: String) -> Void)?
     var buttontitles: [String] = []
     weak var smartRepliesDelegate: CometChatSmartRepliesDelegate?
     
+    // MARK: - Initialization
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
     
+    private func setupView() {
+        addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
     
-    // MARK: - Public instance Methods
-    
-    /**
-     This method set the array of titles for smart replies view.
-     - Parameter sender: This specifies an user who is pressing this button
-     - Author: CometChat Team
-     - Copyright:  ©  2020 CometChat Inc.
-     */
+    // MARK: - Public Methods
     @discardableResult
     @objc public func set(titles: [String]) -> CometChatSmartReplies {
         buttontitles = titles
@@ -53,19 +79,19 @@ protocol CometChatSmartRepliesDelegate: AnyObject {
     }
     
     @discardableResult
-    @objc  public func set(user : User) -> CometChatSmartReplies {
+    @objc public func set(user: User) -> CometChatSmartReplies {
         self.user = user
         return self
     }
     
     @discardableResult
-    @objc  public func set(group: Group) -> CometChatSmartReplies {
+    @objc public func set(group: Group) -> CometChatSmartReplies {
         self.group = group
         return self
     }
     
     @discardableResult
-    @objc  public func set(message: BaseMessage) -> CometChatSmartReplies {
+    @objc public func set(message: BaseMessage) -> CometChatSmartReplies {
         parseSmartReplies(forMessage: message)
         return self
     }
@@ -76,27 +102,28 @@ protocol CometChatSmartRepliesDelegate: AnyObject {
         return self
     }
     
-    private func parseSmartReplies(forMessage: BaseMessage)  {
-        var messages : [String] = [String]()
+    private func parseSmartReplies(forMessage: BaseMessage) {
+        var messages: [String] = []
         if forMessage.sender?.uid != CometChat.getLoggedInUser()?.uid {
-            if  let metaData = forMessage.metaData , let injected = metaData["@injected"] as? [String : Any], let cometChatExtension =  injected[ExtensionConstants.extensions] as? [String : Any], let smartReply = cometChatExtension[ExtensionConstants.smartReply] as? [String : Any] {
+            if let metaData = forMessage.metaData,
+               let injected = metaData["@injected"] as? [String: Any],
+               let cometChatExtension = injected[ExtensionConstants.extensions] as? [String: Any],
+               let smartReply = cometChatExtension[ExtensionConstants.smartReply] as? [String: Any] {
                 
-                if let positive = smartReply["reply_positive"] {
-                    messages.append(positive as! String)
+                if let positive = smartReply["reply_positive"] as? String {
+                    messages.append(positive)
                 }
-                if let neutral = smartReply["reply_neutral"] {
-                    messages.append(neutral as! String)
+                if let neutral = smartReply["reply_neutral"] as? String {
+                    messages.append(neutral)
                 }
-                if let negative = smartReply["reply_negative"] {
-                    messages.append(negative as! String)
+                if let negative = smartReply["reply_negative"] as? String {
+                    messages.append(negative)
                 }
-                messages.append("")
                 DispatchQueue.main.async { [weak self] in
                     if messages.isEmpty {
                         self?.isHidden = true
                     } else {
                         self?.isHidden = false
-                        
                         self?.set(titles: messages)
                     }
                 }
@@ -110,73 +137,30 @@ protocol CometChatSmartRepliesDelegate: AnyObject {
                 self?.isHidden = true
             }
         }
-        
-    }
-    
-    // MARK: - Initialization of required Methods
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        commonInit()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        commonInit()
-        
-    }
-    
-    //    public override func draw(_ rect: CGRect) {
-    //        setupCollectionView()
-    //        collectionView.showsHorizontalScrollIndicator = false
-    //    }
-    
-    private func commonInit() {
-        let loadedNib = CometChatUIKit.bundle.loadNibNamed(String(describing: type(of: self)), owner: self, options: nil)
-        if let contentView = loadedNib?.first as? UIView  {
-            contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            contentView.frame = bounds
-            addSubview(contentView)
-        }
-        setupCollectionView()
-        collectionView.showsHorizontalScrollIndicator = false
-        
-    }
-    
-    // MARK: - Private instance Methods
-    
-    /// This method will setup the collection view for smart replies
-    private func setupCollectionView() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        let cometChatSmartRepliesItem = UINib(nibName: "CometChatSmartRepliesItem", bundle: CometChatUIKit.bundle)
-        collectionView.register(cometChatSmartRepliesItem, forCellWithReuseIdentifier: "CometChatSmartRepliesItem")
-        collectionView.backgroundColor = SmartRepliesStyle().background
-        collectionView.roundViewCorners(corner: SmartRepliesStyle().cornerRadius)
     }
     
     private func sendTextMessage(for message: String, _ forEntity: AppEntity) {
-        if !message.isEmpty {
-            var textMessage: TextMessage?
-            if let uid = (forEntity as? User)?.uid {
-                textMessage =  TextMessage(receiverUid: uid, text: message, receiverType: .user)
-            }else if  let guid = (forEntity as? Group)?.guid {
-                textMessage =  TextMessage(receiverUid: guid, text: message, receiverType: .group)
-            }
-            textMessage?.muid = "\(Int(Date().timeIntervalSince1970 * 1000))"
-            textMessage?.senderUid = CometChat.getLoggedInUser()?.uid ?? ""
-            textMessage?.sender = CometChat.getLoggedInUser()
-            
-            if let textMessage = textMessage {
-                CometChatMessageEvents.ccMessageSent(message: textMessage, status: .inProgress)
-                
-                CometChat.sendTextMessage(message: textMessage) { updatedTextMessage in
-                    CometChatMessageEvents.ccMessageSent(message: updatedTextMessage, status: .success)
-                    
-                } onError: { error in
-                    if let error = error {
-                        textMessage.metaData = ["error": true]
-                        CometChatMessageEvents.ccMessageSent(message: textMessage, status: .error)
-                    }
+        guard !message.isEmpty else { return }
+        var textMessage: TextMessage?
+        
+        if let uid = (forEntity as? User)?.uid {
+            textMessage = TextMessage(receiverUid: uid, text: message, receiverType: .user)
+        } else if let guid = (forEntity as? Group)?.guid {
+            textMessage = TextMessage(receiverUid: guid, text: message, receiverType: .group)
+        }
+        
+        textMessage?.muid = "\(Int(Date().timeIntervalSince1970 * 1000))"
+        textMessage?.senderUid = CometChat.getLoggedInUser()?.uid ?? ""
+        textMessage?.sender = CometChat.getLoggedInUser()
+        
+        if let textMessage = textMessage {
+            CometChatMessageEvents.ccMessageSent(message: textMessage, status: .inProgress)
+            CometChat.sendTextMessage(message: textMessage) { updatedTextMessage in
+                CometChatMessageEvents.ccMessageSent(message: updatedTextMessage, status: .success)
+            } onError: { error in
+                if error != nil {
+                    textMessage.metaData = ["error": true]
+                    CometChatMessageEvents.ccMessageSent(message: textMessage, status: .error)
                 }
             }
         }

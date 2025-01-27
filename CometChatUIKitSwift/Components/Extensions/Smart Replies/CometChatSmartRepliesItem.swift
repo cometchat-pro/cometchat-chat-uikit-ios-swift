@@ -20,8 +20,20 @@ protocol CometChatSmartRepliesItemDelegate: AnyObject {
 class CometChatSmartRepliesItem: UICollectionViewCell {
     
     // MARK: - Declaration of IBOutlets
-    @IBOutlet weak var smartReplyButton: UIButton!
-    @IBOutlet weak var smartRepliesButtonView: UIView!
+//    @IBOutlet weak var smartReplyButton: UIButton!
+//    @IBOutlet weak var smartRepliesButtonView: UIView!
+    
+    
+    public lazy var smartReplyButton: UIButton = {
+        let button = UIButton().withoutAutoresizingMaskConstraints()
+        return button
+    }()
+    
+    public lazy var smartRepliesButtonView: UIView = {
+        let view = UIView().withoutAutoresizingMaskConstraints()
+        return view
+    }()
+    
 
     // MARK: - Declaration of Variables
     weak var smartRepliesItemDelegate: CometChatSmartRepliesItemDelegate?
@@ -51,7 +63,12 @@ class CometChatSmartRepliesItem: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
         //TODO: - Redundant code.
-       
+        setupUI()
+    }
+    
+    public func setupUI(){
+        smartRepliesButtonView.embed(smartRepliesButtonView)
+        smartRepliesButtonView.addSubview(smartReplyButton)
     }
     
     public func applyShadow() {

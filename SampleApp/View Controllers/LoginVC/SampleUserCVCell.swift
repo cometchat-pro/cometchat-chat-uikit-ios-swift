@@ -139,4 +139,8 @@ class SampleUserCVCell: UICollectionViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.reset()
+    }
 }

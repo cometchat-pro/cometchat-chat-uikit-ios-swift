@@ -21,17 +21,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         currentScene = scene
-        initialisationCometChatUIKit()
         
-        if CometChat.getLoggedInUser() != nil {
-            setRootViewController(UINavigationController(rootViewController: HomeScreenViewController()))
-        } else {
-            if AppConstants.APP_ID.isEmpty || AppConstants.AUTH_KEY.isEmpty || AppConstants.REGION.isEmpty {
-                setRootViewController(ChangeAppCredentialsVC())
-            } else {
-                setRootViewController(LoginWithUidVC())
-            }
+        if !AppConstants.APP_ID.isEmpty && !AppConstants.AUTH_KEY.isEmpty && !AppConstants.REGION.isEmpty{
+            let defaults = UserDefaults.standard
+            defaults.set(AppConstants.APP_ID, forKey: "appID")
+            defaults.set(AppConstants.REGION, forKey: "region")
+            defaults.set(AppConstants.AUTH_KEY, forKey: "authKey")
         }
+        
+        initialisationCometChatUIKit(completion: {
+            if CometChat.getLoggedInUser() != nil {
+                self.setRootViewController(UINavigationController(rootViewController: HomeScreenViewController()))
+            } else {
+                let appId = UserDefaults.standard.string(forKey: "appID") ?? ""
+                let authKey = UserDefaults.standard.string(forKey: "authKey") ?? ""
+                let region = UserDefaults.standard.string(forKey: "region") ?? ""
+                
+                if appId.isEmpty && authKey.isEmpty && region.isEmpty{
+                    self.setRootViewController(ChangeAppCredentialsVC())
+                } else {
+                    self.setRootViewController(LoginWithUidVC())
+                }
+            }
+        })
+        
+        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -84,14 +98,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       
     }
     
-    func initialisationCometChatUIKit() {
-        if(AppConstants.APP_ID.contains("Enter") || AppConstants.APP_ID.contains("ENTER") || AppConstants.APP_ID.contains("NULL") || AppConstants.APP_ID.contains("null") || AppConstants.APP_ID.count == 0) {
+    func initialisationCometChatUIKit(completion: @escaping() -> ()) {
+        
+        let appId = UserDefaults.standard.string(forKey: "appID") ?? ""
+        let authKey = UserDefaults.standard.string(forKey: "authKey") ?? ""
+        let region = UserDefaults.standard.string(forKey: "region") ?? ""
+        
+        if appId.isEmpty && authKey.isEmpty && region.isEmpty{
             print("Incorrect App Constants")
+            completion()
         } else {
             let uikitSettings = UIKitSettings()
-            uikitSettings.set(appID: AppConstants.APP_ID)
-                .set(authKey: AppConstants.AUTH_KEY)
-                .set(region: AppConstants.REGION)
+            uikitSettings.set(appID: appId)
+                .set(authKey: authKey)
+                .set(region: region)
                 .subscribePresenceForAllUsers()
                 .build()
             
@@ -99,7 +119,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 result in
                 switch result {
                 case .success(_):
-                    CometChat.setSource(resource: "uikit-v4", platform: "ios", language: "swift")
+                    CometChat.setSource(resource: "uikit-v5", platform: "ios", language: "swift")
+                    completion()
                     break
                 case .failure(let error):
                     print( "Initialization Error:  \(error.localizedDescription)")

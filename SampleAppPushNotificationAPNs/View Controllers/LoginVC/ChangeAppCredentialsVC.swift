@@ -124,6 +124,7 @@ class ChangeAppCredentialsVC: UIViewController {
     }()
     
     var selectedRegion = ""
+    var isPresented = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -239,16 +240,21 @@ class ChangeAppCredentialsVC: UIViewController {
         
         if checkForError() {
             
-            AppConstants.APP_ID = appIDTextFiled.textField.text ?? ""
-            AppConstants.REGION = selectedRegion
-            AppConstants.AUTH_KEY = authKeyTextField.textField.text ?? ""
-            
+            let defaults = UserDefaults.standard
+            defaults.set(appIDTextFiled.textField.text ?? "", forKey: "appID")
+            defaults.set(selectedRegion, forKey: "region")
+            defaults.set(authKeyTextField.textField.text ?? "", forKey: "authKey")
             
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let sceneDelegate = scene.delegate as? SceneDelegate {
-                sceneDelegate.initialisationCometChatUIKit()
+                sceneDelegate.initialisationCometChatUIKit(completion: {
+                    if self.isPresented{
+                        self.dismiss(animated: true)
+                    }else{
+                        sceneDelegate.setRootViewController(UINavigationController(rootViewController: LoginWithUidVC()))
+                    }
+                })
             }
-            self.dismiss(animated: true)
             
         }
     }
